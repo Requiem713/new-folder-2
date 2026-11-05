@@ -1,15 +1,19 @@
+顺序
+1
 #include<stdio.h>
 int main(){
     printf("zhe\nshi\nyi\ndao\nqian\ndao\nti\n");
     return 0;
 }
 
+2
 #include<stdio.h>
 int main(){
     printf("4396 = 28 x 157\n5346 = 18 x 297\n5346 = 27 x 198\n5796 = 12 x 483\n5796 = 42 x 138\n6952 = 4 x 1738\n7254 = 39 x 186\n7632 = 48 x 159\n7852 = 4 x 1963");
     return 0;
 }
 
+3
 #include<stdio.h>
 int main(){
     printf("     **     \n");
@@ -21,12 +25,14 @@ int main(){
     return 0;
 }
 
+4
 #include<stdio.h>
 int main(){
     printf("Helo word!");
     return 0;
 }
 
+5
 #include<stdio.h>
 int main(){
     printf("1*1= 1\n");
@@ -41,6 +47,9 @@ int main(){
     return 0
 }
 
+
+选择
+1
 #include<stdio.h>
 int main(){
     int a,b;
@@ -56,6 +65,8 @@ int main(){
     }
 }
 
+
+2
 #include<stdio.h>
 int main(){
     int n;
@@ -67,6 +78,7 @@ int main(){
     }
 }
 
+3
 #include<stdio.h>
 int main(){
     int x,y;
@@ -78,6 +90,7 @@ int main(){
     }
 }
 
+4
 #include<stdio.h>
 int main(){
     int m,n;
@@ -89,6 +102,7 @@ int main(){
     }
 }
 
+5
 #include<stdio.h>
 int main(){
     long long X,Y,Z;
@@ -100,6 +114,8 @@ int main(){
     }printf("%lld",Z);
 }
 
+循环
+1
 #include<stdio.h>
 int main(){
     int n;
@@ -138,8 +154,8 @@ int main(){
 	}
 }
 
+2
 #include <stdio.h>
-
 int main() {
     int n;
     scanf("%d", &n);
@@ -153,6 +169,7 @@ int main() {
     return 0;
 }
 
+3
 #include<stdio.h>
 int main(){
 	char n,c=64,b=65,a,num=0;
@@ -180,6 +197,7 @@ int main(){
 	}
 }
 
+4
 #include<stdio.h>
 int main()
 {
@@ -215,6 +233,7 @@ int main()
     return 0;
 }
 
+5
 #include<stdio.h>
 int main(){
     int n;int i,j;
@@ -245,8 +264,65 @@ int main(){
     return 0;
 }
 
+数组
+1
+#include<stdio.h>
+int main(){
+    int T,i,j,t,n;
+    scanf("%d",&T);
+    for (i=0;i<T;i++) {
+        scanf("%d",&n);
+        long long all=0,a[n+1],max=0,min=1000000000;
+        a[0]=0;
+        for (j=0;j<n;j++){
+            scanf("%d",&t);
+            all+=t;
+            a[j+1]=t;
+            if (a[j+1]>max){
+            	max=a[j+1];
+			}
+			if (a[j+1]<min){
+				min=a[j+1];
+			}
+        }
+        double s=0,X=all/(n*0.1*10);
+        for (j=0;j<n;j++) {
+        	s+=(a[j+1]-X)*(a[j+1]-X);
+		}
+		printf("%d %.3f\n",max-min,s/n);
+    }
+}
 
+2
+#include<stdio.h>
+int main(){
+    int n,x,cnt=0;
+    scanf("%d %d",&n,&x);
+    for (int i=1;i<=n;i++) {
+        int t=i;
+        while (t>0) {
+            int j=t%10;
+            t/=10;
+            if (j==x) {
+                cnt++;
+            }
+        }
+    }
+    printf("%d",cnt);
+}
 
+3
+#include<stdio.h>
+int main(){
+    int n,k,m,winner=0,i;
+    scanf("%d %d %d",&n,&k,&m);
+    for (i=2;i<=n;i++) {
+    	winner=(winner+m)%i;
+	}
+	printf("%d",(winner+k)%n);
+}
+
+4
 #include<stdio.h>
 int main(){
     int y,m,x,cnt=0,n;
@@ -271,10 +347,82 @@ int main(){
 	}    
 }
 
+5
+#include <stdio.h>
+int main(){
+	int n,a[100],i;
+	scanf("%d",&n);
+	for(i=0;i<n;i++){
+		scanf("%d",&a[i]);
+	}
+	if(n==1){
+		if(a[0]>=1&&a[0]<15) printf("-1");
+		if(a[0]==0) printf("UP");
+		if(a[0]==15) printf("DOWN"); 
+	}
+	else{
+		if(a[n-1]>a[n-2]) printf("UP ");
+		if(a[n-1]<a[n-2]) printf("DOWN ");
+	}
+	return 0;
+}
 
+函数
+1
+#include<stdio.h>
+int f(int L,int R)
+{
+    int x=L,cnt=0;
+    while (x>=L) {
+        int t=x;
+        while (t!=0) {
+            int a=t%10;
+            t/=10;
+            if (a==2) {
+                cnt++; 
+            }
+        }
+        if (x==R) {
+            return cnt;
+        }
+        x++;
+    }
+    return 0;
+    
+} 
+int main(){
+    int L,R;
+    scanf("%d %d",&L,&R);
+    printf("%d",f(L,R));
+}
 
+2
+#include<stdio.h>
+int main(){
+    int y,m,x,cnt=0,n;
+    while(scanf("%d %d %d",&y,&m,&x)!=EOF){
+    int a[]={31,28,31,30,31,30,31,31,30,31,30,31};
+    if ((y%4==0&&y%100!=0)||(y%400==0)) {
+        a[1]=a[1]+1;
+    }
+    int all,i; 
+    for (all=y*10000+m*100+1;all%100!=a[m-1]+1;all++){
+        int t=all;
+        for (i=0;i<8;i++){
+            int b=t%10;
+            if (b==x) {
+                cnt++;
+            }
+            t/=10;
+        }
+    }
+    printf("%d\n",cnt);
+	cnt=0;
+	}    
+}
 
-3#include<stdio.h>
+3
+#include<stdio.h>
 int main(){
     long long t;
     scanf("%lld",&t);
@@ -298,7 +446,8 @@ int main(){
     return 0;
 }
 
-4#include<stdio.h>
+4
+#include<stdio.h>
 int main(){
     long long a,b;
     scanf("%lld %lld",&a,&b);
@@ -317,7 +466,9 @@ int main(){
     }
     printf("%d",cnt);
 }
-5#include<stdio.h>
+
+5
+#include<stdio.h>
 #include<string.h>
 int main(){
     int T,j,i,k,c,d;
@@ -357,7 +508,8 @@ int main(){
 
 
 随机数列
-1.#include<stdio.h>
+1
+#include<stdio.h>
 int main(){
     int T,i,j,t,n;
     scanf("%d",&T);
@@ -383,7 +535,9 @@ int main(){
 		printf("%d %.3f\n",max-min,s/n);
     }
 }
-2.#include<stdio.h>
+
+2
+#include<stdio.h>
 int main(){
     int n,x,cnt=0;
     scanf("%d %d",&n,&x);
@@ -400,7 +554,8 @@ int main(){
     printf("%d",cnt);
 }
 
-3. #include<stdio.h>
+3
+#include<stdio.h>
 int main(){
     int n,k,m,winner=0,i;
     scanf("%d %d %d",&n,&k,&m);
@@ -410,7 +565,8 @@ int main(){
 	printf("%d",(winner+k)%n);
 }
 
-4 #include<stdio.h>
+4
+#include<stdio.h>
 int main(){
     int L,M,i,j,cnt=0,l,r;
     scanf("%d %d",&L,&M);
@@ -432,41 +588,88 @@ int main(){
     printf("%d",cnt);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+5
+#include<stdio.h>
+#include<string.h>
+int main(){
+    int T,j,i,k,c,d;
+    char A[110],B[110];
+    scanf("%d",&T);
+    for (i=0;i<T;i++) {
+        scanf("%s %s",A,B);
+        printf("5");
+        int a=strlen(A),b=strlen(B);
+        if (a>=b) {
+        	c=a,d=b;
+		}else {
+			c=b,d=a;
+		}
+        for (j=0;j<d-2;j++) {
+        	printf("4");
+		}
+        if (c-d==0) {
+        	printf("2");
+		}
+        if (c-d==1) {
+        	printf("35");
+		}
+		if (c-d>1) {
+			printf("3");
+			for (k=0;k<c-d-1;k++) {
+				printf("6");
+			}
+			printf("5");
+		}
+        for (j=0;j<d-2;j++) {
+        	printf("8");
+		}
+        printf("9\n");
+    }
+}
 
 
 STL
+1
+#include <stdio.h>
+int main() {
+	int a=1,b=1,c=1,d=1,e=1,f=1,g=1,h=1;
+	for(a=1;a<=8;a++){
+		for(b=1;b<=8;b++){
+		for(c=1;c<=8;c++){
+		for(d=1;d<=8;d++){
+		for(e=1;e<=8;e++){
+		for(f=1;f<=8;f++){
+		for(g=1;g<=8;g++){
+		for(h=1;h<=8;h++){
+			if (a!=b&&a!=c&&a!=d&&a!=e&&a!=f&&a!=g&&a!=h) {
+				if (b!=c&&b!=d&&b!=e&&b!=f&&b!=g&&b!=h){
+					if (c!=d&&c!=e&&c!=f&&c!=g&&c!=h){
+						if (d!=e&&d!=f&&d!=g&&d!=h){
+							if(e!=f&&e!=g&&e!=h){
+								if (f!=g&&f!=h){
+									if(g!=h){
+										printf("%d %d %d %d %d %d %d %d\n",a,b,c,d,e,f,g,h);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		
+	}
+	}
+	}
+	}
+	}
+	}
+	}
+	}
+	return 0;
+}
 
-
-2#include<stdio.h>
+2
+#include<stdio.h>
 #include<stdlib.h>
 int cmp(const void *a,const void *b)
 {
@@ -482,7 +685,8 @@ int main()
         scanf("%d",&a[i]);
 }
 
-3#include<stdio.h>
+3
+#include<stdio.h>
 int main(){
     int n=0,m=0;
     long long a[100],i,j,k;
@@ -514,7 +718,8 @@ int main(){
     }
 }
 
-4#include<stdio.h>
+4
+#include<stdio.h>
 int cmp(const void* a,const void* b){
     char c[51],d[51];
     sprintf(c,"%d%d",*(int*)a,*(int*)b);
@@ -548,7 +753,8 @@ int main(){
     printf("%lld",sum);
 }
 
-5.#include <stdio.h>
+5
+#include <stdio.h>
 #include <string.h>
 
 int main() {
@@ -571,3 +777,450 @@ int main() {
 		printf("Bad");
 	}
 }
+
+贪心
+1
+#include <stdio.h>
+int main() {
+	int n,t;
+	scanf("%d %d",&n,&t);
+	char a[200010];
+	int i,j,k;
+	scanf("%s",a);
+	for(i=0; i<n; i++) {
+		if(a[i]=='.') {
+			break;
+		}
+	}
+	if(i==n) {
+		printf("%s\n",a);
+		return 0;
+	}
+	for(k=0; k<t; k++) {
+		for(j=i+1; j<n; j++) {
+			if(a[j]>='5') {
+				n=j;
+				a[j]='\0';
+				a[j-1]++;
+			}
+		}
+	}
+	if(a[i]!='.') {
+		a[i]='\0';
+		for(j=i-1; j>=0; j--) {
+			if( a[j]=='9') {
+				a[j]='0';
+			} else {
+				a[j]++;
+				break;
+			}
+		}
+		if(j==-1 && a[0]=='0') {
+			printf("1%s\n",a);
+		} else {
+			printf("%s\n",a);
+		}
+		return 0;
+	}
+	printf("%s\n",a);
+	return 0;
+}
+
+2
+#include<stdio.h>
+int main()
+{
+    char a[10],b[9]={'1','2','1','3','0','3','1','2','1'};
+    while(scanf("%s",a)!=EOF)
+    {
+        int j=1,i,c[9]={0};
+        c[a[0]-'0'-1]=1;
+        for(i=0;a[i+1]!='\0';i++)
+        {
+            int m=a[i]-'0'-1,n=a[i+1]-'0'-1;
+            if(m==n)
+            {
+                j=0;
+                break;
+            }
+            if(c[n]==1)
+            {
+                j=0;
+                break;
+            }
+            c[m]=1;
+            if(b[m]==b[n]&&!c[(m+n)/2])
+            {
+                j=0;
+                break;
+            }
+        }
+        if(j==1)
+            printf("YES\n");
+        else
+            printf("NO\n");
+    }
+}
+
+
+3
+#include<stdio.h>
+#include<string.h>
+int main(){
+	char a[100000],b[100000],c,d=0,cnt=0;
+	while(scanf("%s",a)==1){
+        strcat(b,a);
+        scanf("%c",&c);
+        b[strlen(b)]=c;
+    }
+    int n=(int)strlen(b);
+	for(int i=0;i<n;i++){
+        if(d==0){
+            if(b[i]=='/'&&b[i+1]=='*'){
+    		    for(int j=i+2;j<n;j++){
+				   if(b[j]=='*'&&b[j+1]=='/'){
+					  i=j+2;
+					  break;
+				   }
+			    }
+            }
+        }
+        if(b[i]=='"'&&b[i-1]!=92){
+            for(int j=i;j<n;j++){
+                if(b[j]=='"'){
+                    d=1;
+                    break;
+                }
+            }
+            cnt++;
+        }
+        if(cnt%2==0){
+        	d=0;
+            }
+			printf("%c",b[i]);	
+		}
+}  
+
+4
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	int t=0,j;
+	scanf("%d",&t);
+	for(j=0;j<t;j++){
+		char s[100000];
+		scanf("%s",s);
+		int l=strlen(s);
+		for(int i=0;i<l;i++)
+		{
+			if(s[i]=='z'&&s[i+1]=='e'&&s[i+2]=='r'&&s[i+3]=='o')
+			{
+				printf("0");
+			}
+			if(s[i]=='t'&&s[i+1]=='w'&&s[i+2]=='o')
+			{
+				printf("2");
+			}
+			if(s[i]=='f'&&s[i+1]=='o'&&s[i+2]=='u'&&s[i+3]=='r')
+			{
+				printf("4");
+			}
+			if(s[i]=='s'&&s[i+1]=='i'&&s[i+2]=='x')
+			{
+				printf("6");
+			}
+			if(s[i]=='n'&&s[i+1]=='i'&&s[i+2]=='n'&&s[i+3]=='e')
+			{
+				printf("9");
+			}
+			if(s[i]=='0'||s[i]=='2'||s[i]=='4'||s[i]=='6'||s[i]=='9')
+			{
+				printf("%c",s[i]);
+			}
+		}
+		printf("\n");
+	}
+}
+
+5
+#include<stdio.h>
+int main()
+{
+	int a[10],b[10],i,c=0,d=-1,m=-1,all=0;
+	for(i = 0;i < 10;i++){
+		scanf("%d",&a[i]);
+		all+=a[i];
+		b[i]=a[i]/ 2;
+		if(a[i]%2 == 1){
+			c++;
+			d=i;
+		}
+	}
+	if(c>1||all== 0){
+		printf("-1");
+		return 0;
+	}
+		if(all==1){
+			printf("%d",d);
+			return 0;
+		}
+		for(i=1;i<=9;i++){
+			if(b[i]> 0){
+				m=i;
+				break;
+			}
+		}
+		if(m==-1){
+			printf("-1");
+			return 0;
+		}
+		printf("%d",m);
+		for(i=0;i<=9;i++){
+			int cnt=b[i];
+			if(i==m){
+				cnt--;
+			}
+			for(int j=0;j<cnt;j++)
+			{
+				printf("%d",i);
+			}
+		}
+		if(d!=-1){
+			printf("%d",d);
+		}
+		for(i = 9;i >= 0;i--){
+			int cnt = b[i];
+			if(i==m){
+				cnt--;
+			}
+		   for(int j=0;j<cnt;j++){
+		   	printf("%d",i);
+		   }	
+		}
+    printf("%d",m);
+		return 0;
+	}
+贪心
+1
+#include <stdio.h>
+int main() {
+	int n,t;
+	scanf("%d %d",&n,&t);
+	char a[200010];
+	int i,j,k;
+	scanf("%s",a);
+	for(i=0; i<n; i++) {
+		if(a[i]=='.') {
+			break;
+		}
+	}
+	if(i==n) {
+		printf("%s\n",a);
+		return 0;
+	}
+	for(k=0; k<t; k++) {
+		for(j=i+1; j<n; j++) {
+			if(a[j]>='5') {
+				n=j;
+				a[j]='\0';
+				a[j-1]++;
+			}
+		}
+	}
+	if(a[i]!='.') {
+		a[i]='\0';
+		for(j=i-1; j>=0; j--) {
+			if( a[j]=='9') {
+				a[j]='0';
+			} else {
+				a[j]++;
+				break;
+			}
+		}
+		if(j==-1 && a[0]=='0') {
+			printf("1%s\n",a);
+		} else {
+			printf("%s\n",a);
+		}
+		return 0;
+	}
+	printf("%s\n",a);
+	return 0;
+}
+
+2
+#include<stdio.h>
+int main()
+{
+    char a[10],b[9]={'1','2','1','3','0','3','1','2','1'};
+    while(scanf("%s",a)!=EOF)
+    {
+        int j=1,i,c[9]={0};
+        c[a[0]-'0'-1]=1;
+        for(i=0;a[i+1]!='\0';i++)
+        {
+            int m=a[i]-'0'-1,n=a[i+1]-'0'-1;
+            if(m==n)
+            {
+                j=0;
+                break;
+            }
+            if(c[n]==1)
+            {
+                j=0;
+                break;
+            }
+            c[m]=1;
+            if(b[m]==b[n]&&!c[(m+n)/2])
+            {
+                j=0;
+                break;
+            }
+        }
+        if(j==1)
+            printf("YES\n");
+        else
+            printf("NO\n");
+    }
+}
+
+
+3
+#include<stdio.h>
+#include<string.h>
+int main(){
+	char a[100000],b[100000],c,d=0,cnt=0;
+	while(scanf("%s",a)==1){
+        strcat(b,a);
+        scanf("%c",&c);
+        b[strlen(b)]=c;
+    }
+    int n=(int)strlen(b);
+	for(int i=0;i<n;i++){
+        if(d==0){
+            if(b[i]=='/'&&b[i+1]=='*'){
+    		    for(int j=i+2;j<n;j++){
+				   if(b[j]=='*'&&b[j+1]=='/'){
+					  i=j+2;
+					  break;
+				   }
+			    }
+            }
+        }
+        if(b[i]=='"'&&b[i-1]!=92){
+            for(int j=i;j<n;j++){
+                if(b[j]=='"'){
+                    d=1;
+                    break;
+                }
+            }
+            cnt++;
+        }
+        if(cnt%2==0){
+        	d=0;
+            }
+			printf("%c",b[i]);	
+		}
+}  
+
+4
+#include<stdio.h>
+#include<string.h>
+int main()
+{
+	int t=0,j;
+	scanf("%d",&t);
+	for(j=0;j<t;j++){
+		char s[100000];
+		scanf("%s",s);
+		int l=strlen(s);
+		for(int i=0;i<l;i++)
+		{
+			if(s[i]=='z'&&s[i+1]=='e'&&s[i+2]=='r'&&s[i+3]=='o')
+			{
+				printf("0");
+			}
+			if(s[i]=='t'&&s[i+1]=='w'&&s[i+2]=='o')
+			{
+				printf("2");
+			}
+			if(s[i]=='f'&&s[i+1]=='o'&&s[i+2]=='u'&&s[i+3]=='r')
+			{
+				printf("4");
+			}
+			if(s[i]=='s'&&s[i+1]=='i'&&s[i+2]=='x')
+			{
+				printf("6");
+			}
+			if(s[i]=='n'&&s[i+1]=='i'&&s[i+2]=='n'&&s[i+3]=='e')
+			{
+				printf("9");
+			}
+			if(s[i]=='0'||s[i]=='2'||s[i]=='4'||s[i]=='6'||s[i]=='9')
+			{
+				printf("%c",s[i]);
+			}
+		}
+		printf("\n");
+	}
+}
+
+5 
+#include<stdio.h>
+int main()
+{
+	int a[10],b[10],i,c=0,d=-1,m=-1,all=0;
+	for(i = 0;i < 10;i++){
+		scanf("%d",&a[i]);
+		all+=a[i];
+		b[i]=a[i]/ 2;
+		if(a[i]%2 == 1){
+			c++;
+			d=i;
+		}
+	}
+	if(c>1||all== 0){
+		printf("-1");
+		return 0;
+	}
+		if(all==1){
+			printf("%d",d);
+			return 0;
+		}
+		for(i=1;i<=9;i++){
+			if(b[i]> 0){
+				m=i;
+				break;
+			}
+		}
+		if(m==-1){
+			printf("-1");
+			return 0;
+		}
+		printf("%d",m);
+		for(i=0;i<=9;i++){
+			int cnt=b[i];
+			if(i==m){
+				cnt--;
+			}
+			for(int j=0;j<cnt;j++)
+			{
+				printf("%d",i);
+			}
+		}
+		if(d!=-1){
+			printf("%d",d);
+		}
+		for(i = 9;i >= 0;i--){
+			int cnt = b[i];
+			if(i==m){
+				cnt--;
+			}
+		   for(int j=0;j<cnt;j++){
+		   	printf("%d",i);
+		   }	
+		}
+    printf("%d",m);
+		return 0;
+	}
