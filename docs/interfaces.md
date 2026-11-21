@@ -22,7 +22,7 @@
 | `recent_wrong_questions(limit=20) -> list[dict]` | 最近录入的错题 |
 | `wrong_question_count() -> int` | 错题总数 |
 | `log_practice(kp_id, is_correct, question_ref=None, difficulty=None, duration_sec=None)` | 写练习记录 |
-| `mastery_table() -> pandas.DataFrame` | 列：`[TODO]` |
+| `mastery_table() -> pandas.DataFrame` | 🔴 九列已定（D 先定义、C 照此实现）：`知识点 / 所属章节 / 练习数 / 做对数 / 基础正确率 / 难度加权 / 时间衰减 / 掌握度 / 状态`。⚠️ 本行与第七节重复：实现落在 `app/profile.py`（C₂），界面统一从 `app.profile` 导入，`db.py` 只提供底层查询 |
 | `weak_points(n) -> list[dict]` | 排除样本不足后掌握度最低的 n 个 |
 | `kp_error_distribution() -> list[dict]` | 错题按知识点分布 + 主要错因 |
 | `cost_summary() -> dict` | 累计调用次数与 token 用量 |
@@ -184,6 +184,24 @@ confidence / source / degraded / note`
 ⚠️ 漏掉"≥3 次"前置条件的后果：一个只练过 1 次且答错的知识点会被直接判成
 "未掌握"并霸占榜首 —— 正是 PLAYBOOK 明令要避免的那个缺陷。
 
+### 界面依赖的两个返回形状（D 已按此实现，C 请照此对齐）
+
+`mastery_table()` 的九列，顺序固定：
+
+```
+知识点 / 所属章节 / 练习数 / 做对数 / 基础正确率 / 难度加权 / 时间衰减 / 掌握度 / 状态
+```
+
+- `基础正确率`、`掌握度` 以及两个系数都用 0~100 的百分数值
+- `状态` 只能是这四个字符串：`未掌握` / `基本掌握` / `已掌握` / `样本不足`
+- 🔴 必须 LEFT JOIN：从没练过的知识点也要出现在结果里
+
+`summary_text()` 的键名（界面按这些键取指标卡，另兼容同名中文键）：
+
+```
+wrong_total / not_mastered / basic / mastered / insufficient / weakest
+```
+
 ---
 
 ## 八、界面 — `streamlit_app.py`　维护人：D
@@ -194,6 +212,13 @@ confidence / source / degraded / note`
 
 ⚠️ 开场白只做页面渲染，不写进对话历史（否则发给模型的序列以 assistant 开头会报错）。
 
+**换桩位置只有一个**：文件顶部那一个 `from app.stubs import (...)` 区块。
+换真实现时把名字映射到 `app.qa` / `app.intake` / `app.profile` / `app.knowledge` / `app.db`，
+函数签名不变则界面其余代码一行不用改。
+
+⚠️ 界面自己不读 `.env`：配置状态一律问 `is_configured()` / `missing_config_keys()`，
+   `.env` 由 `llm_client` 负责加载（桩函数里为保持行为一致也读了一次）。
+
 ---
 
 ## 九、桩函数 — `app/stubs.py`　维护人：D
@@ -201,10 +226,19 @@ confidence / source / degraded / note`
 队友代码没好时用来跑通界面。🔴 返回的数据形状必须与本文件约定的完全一致，
 将来只需替换 import 来源，界面代码不动。
 
-在本节下方维护一张清单，标注哪些还是桩：
+当前清单（换桩时把 `[ ]` 改成 `[x]`，并注明日期）：
 
 ```
-[ ] mastery_table()      待 C 实现
-[ ] answer()             待 B 实现
-[ ] analyze_text()       待 B 实现
+[ ] is_configured() / missing_config_keys()              待 B（llm_client）
+[ ] answer()                                             待 B（qa）
+[ ] analyze_text() / analyze_image()                     待 B（intake）
+[ ] commit()                                             待 B（intake）🔴 唯一落库入口
+[ ] chapter_candidates() / all_knowledge_points()        待 C₁（knowledge）
+[ ] find_or_create()                                     待 C₁（knowledge）
+[ ] recent_wrong_questions() / wrong_question_count()    待 C₁（db）
+[ ] mastery_table() / summary_text() / weak_points()     待 C₂（profile）
+[ ] build_practice_session() / grade() / record_result() 待 C₂（profile）
 ```
+
+⚠️ 桩的假数据刻意做了「未掌握 / 基本掌握 / 已掌握 / 样本不足」四档，
+   验收清单第 9 条（从没练过的知识点不霸榜）现在就能在界面上看出来。
