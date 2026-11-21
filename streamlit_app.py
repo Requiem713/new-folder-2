@@ -31,13 +31,16 @@ from app.stubs import (
     analyze_image,
     analyze_text,
     answer,
+    build_practice_session,
     commit,
     is_configured,
     list_subject_topics,
     mastery_table,
     missing_config_keys,
     recent_wrong_questions,
+    record_result,
     summary_text,
+    weak_points,
 )
 
 # ---------------------------------------------------------------------------
@@ -428,7 +431,69 @@ def render_mastery_tab() -> None:
 
 def render_practice_tab() -> None:
     st.subheader("④ 针对性练习")
-    st.info("⏳ 阶段三实现（加分项）：按薄弱点出题 → 作答 → 判分 → 回写掌握度。")
+    st.caption(
+        "按「最薄弱」排名出题（样本不足的不参与）。判分与回写由 profile.record_result 负责，"
+        "做错的题应回流错题本。"
+    )
+
+    weak = weak_points(3)
+    if weak:
+        st.markdown(
+            "**优先练这几个**："
+            + "、".join(f"{w['kp_name']}（{w['mastery']:.1f}%）" for w in weak)
+        )
+
+    count = st.slider("这一轮出几道题", min_value=1, max_value=10, value=3)
+    if st.button("开始练习", type="primary"):
+        items, source = build_practice_session(count)
+        st.session_state["practice"] = {"items": items, "source": source, "result": None}
+        st.rerun()
+
+    session = st.session_state.get("practice")
+    if not session:
+        return
+    items = session["items"]
+    st.caption("题目来源：" + session["source"])
+
+    answers = {}
+    with st.form("practice_form"):
+        for index, item in enumerate(items, start=1):
+            st.markdown(f"**{index}. {item['question']}**")
+            options = item.get("options") or {}
+            answers[item["id"]] = st.radio(
+                f"第 {index} 题",
+                options=list(options),
+                format_func=lambda key, opts=options: f"{key}. {opts[key]}",
+                key=f"ans_{item['id']}",
+                label_visibility="collapsed",
+            )
+        submitted = st.form_submit_button("提交答案", type="primary")
+
+    if submitted:
+        try:
+            session["result"] = record_result(items, answers)
+        except Exception as exc:  # noqa: BLE001 - 判分失败要说人话，不能白屏
+            st.error(f"判分失败：{exc}")
+            return
+
+    results = session.get("result")
+    if results is None:
+        return
+
+    right = sum(1 for flag in results if flag)
+    if right == len(results):
+        st.success(f"本轮 {len(results)} 题全对。")
+    else:
+        st.warning(f"本轮 {len(results)} 题，答对 {right} 题。错题应回写掌握度并回到错题本。")
+
+    for item, is_right in zip(items, results):
+        st.markdown(("✅ " if is_right else "❌ ") + f"**{item['question']}**")
+        if is_right:
+            continue
+        options = item.get("options") or {}
+        answer_key = item.get("answer")
+        st.caption(f"正确答案：{answer_key}. {options.get(answer_key, '')}")
+        st.caption("解析：" + str(item.get("explanation") or "（无）"))
 
 
 # ---------------------------------------------------------------------------
