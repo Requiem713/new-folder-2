@@ -34,8 +34,10 @@ from app.stubs import (
     commit,
     is_configured,
     list_subject_topics,
+    mastery_table,
     missing_config_keys,
     recent_wrong_questions,
+    summary_text,
 )
 
 # ---------------------------------------------------------------------------
@@ -379,7 +381,44 @@ def render_intake_tab() -> None:
 
 def render_mastery_tab() -> None:
     st.subheader("③ 掌握度分析")
-    st.info("⏳ 第 9 步实现：指标卡 + 最薄弱知识点 + 完整表格 + 正确率图表。")
+    st.caption(
+        "掌握度 = 基础正确率 × 难度加权 × 时间衰减（截断 100）。"
+        "系数是固定规则，写死在 SQL 里，不由模型估算。"
+    )
+
+    summary = summary_text()
+    cards = [
+        ("错题总数", _pick(summary, "wrong_total", "错题总数")),
+        ("未掌握", _pick(summary, "not_mastered", "未掌握")),
+        ("基本掌握", _pick(summary, "basic", "基本掌握")),
+        ("已掌握", _pick(summary, "mastered", "已掌握")),
+    ]
+    for column, (label, value) in zip(st.columns(4), cards):
+        column.metric(label, value)
+
+    weakest = _pick(summary, "weakest", "最薄弱", default="—")
+    st.markdown(f"当前最薄弱的知识点：**{weakest}**")
+
+    insufficient = _pick(summary, "insufficient", "样本不足", default=None)
+    if insufficient:
+        st.caption(
+            f"另有 {insufficient} 个知识点练过不足 3 次，标记为「样本不足」——"
+            "它们不参与「最薄弱」排名，否则新知识点会一直霸榜。"
+        )
+
+    table = mastery_table()
+    if table is None or len(table) == 0:
+        st.info("还没有数据。先去 ② 录入一道错题，或运行 `python seed_data.py` 灌入演示数据。")
+        return
+
+    st.dataframe(table, width="stretch", hide_index=True)
+
+    # 🔴 图表用 Streamlit 自带组件，不自己造前端
+    if {"知识点", "基础正确率"}.issubset(set(table.columns)):
+        st.markdown("**各知识点基础正确率**")
+        st.bar_chart(table.set_index("知识点")[["基础正确率"]])
+    else:
+        st.warning("表格列名与契约不一致，已跳过图表。请对照 docs/interfaces.md 的九列定义。")
 
 
 # ---------------------------------------------------------------------------
