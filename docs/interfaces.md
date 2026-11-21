@@ -242,3 +242,37 @@ wrong_total / not_mastered / basic / mastered / insufficient / weakest
 
 ⚠️ 桩的假数据刻意做了「未掌握 / 基本掌握 / 已掌握 / 样本不足」四档，
    验收清单第 9 条（从没练过的知识点不霸榜）现在就能在界面上看出来。
+
+---
+
+## 十、题库文件 — `data/question_bank.json`　维护人：D
+
+⚠️ **本节是 D 提出的格式，待 C₂（`profile.build_practice_session`）确认后固化。**
+有异议在群里说，改完由 D 更新本节。
+
+```json
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "q_001",
+      "chapter_id": "ch_mean_value",
+      "kp_name": "洛必达法则",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "question": "题干",
+      "options": {"A": "…", "B": "…", "C": "…", "D": "…"},
+      "answer": "A",
+      "explanation": "解析"
+    }
+  ]
+}
+```
+
+规则：
+- `kp_name` 是**名字**不是 id：具体知识点运行时才建，出题时由 `find_or_create()` 解析成 id
+- `chapter_id` 必须在 `data/chapters.json` 的 15 个之内
+- `answer` 是选项编号，比较时大小写不敏感（`c` 与 `C` 等价）
+- `difficulty` 只能是 `easy / medium / hard`
+- 当前只放 `single_choice`。填空题型要等 C₂ 的判分支持（等价写法、大小写宽容）到位再加
+- 🔴 演示数据优先从题库抽，只有覆盖不足才让模型生成，且必须通过出题校验器
